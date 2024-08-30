@@ -1,0 +1,255 @@
+<!-- comment -->
+
+<!--
+ HTML: hyper text markup language 
+ Ngôn ngữ đánh dấu siêu văn bản
+ Đây không phải ngôn ngữ lập trình
+ -->
+
+<!-- 
+ document: muốn hiển thị tài liệu nhưng một trang web thì cần chạy trên nền tảng là web page(web brower)
+  -->
+
+<!-- 
+ Trong html các thành phần đều là tag | thẻ 
+ Cấu trúc của một tag là 
+ <tagName attribute> content <\tagName>
+ -->
+
+<!DOCTYPE html>
+<html lang="vi" style="scroll-behavior: smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài số 1: name tag</title>
+  </head>
+  <body>
+    <!-- Bộ heading
+      * Trong html người ta thường đặt tên các tag | thẻ dựa theo chức năng của nó 
+      -->
+    <h1>Anh Điệp đẹp trai quá</h1>
+    <h2>I. Phân tích vẻ đẹp trai của anh Điệp</h2>
+    <h3>I.1 Đôi mắt của người đàn ông nhiều tiền</h3>
+    <h3>I.2 Nụ cười của tri thức trong bóng tối thời đại</h3>
+
+    <!-- Có tất cả 6 thẻ h
+     Số càng lớn thì chữ càng nhỏ 
+     Thẻ h thường dùng làm title, đầu mục 
+     Các thẻ Heading đều có display là block
+     block là thẻ chiếm trọn 1 hàng, không có thẻ nào cùng hàng với nó được
+     inline block: thẻ mà có khối chỉ bao gọn content mà thôi
+     -->
+    <h5 style="display: inline-block">Người đẹp trai nhất</h5>
+    <h6 style="display: inline-block">Là anh Điệp</h6>
+
+    <!-- 
+     p: paragrahphs đoạn văn
+     br: breakline xuống dòng
+     -->
+    <p>
+      Tôi tên là &#8194; &#8194;&#8194; Điệp, nhà tôi ở quận 9 <br />
+      Ba đời nhà tôi làm gỗ, đến đời tôi thì làm yangho
+    </p>
+
+    <!-- pre: preformated -->
+    <!-- <pre>
+      Tôi tên là      Điệp, nhà tôi ở quận 9 
+      Ba đời nhà tôi làm gỗ, đến đời tôi thì làm yangho
+    </pre> -->
+
+    <!-- 
+      Hầu hết các thẻ mà mình dùng đều có thuộc tính style
+      text-align: căn lề cho text của thẻ
+
+      -->
+    <p style="text-align: center">demo text-align với block</p>
+    <p style="display: inline-block">demo text-align với inline-block</p>
+
+    <!-- tab formatting: bộ tượng hình -->
+    <p>
+      <em> Xin chào</em> <small>các</small> bạn, <del>tao</del>
+      <strong>tôi</strong> là <mark>Điệp đẹp trai</mark>
+    </p>
+
+    <p>H<sub>2</sub>O: nước</p>
+    <p>ax<sup>2</sup> + bx + c = 0</p>
+    <!-- 
+     i: italic nghiêng | em: emphasized: nhấn mạnh 
+     b: bold đậm | strong: mạnh mẽ, quan trọng
+     inline: thẻ chủ có content, k có hộp (k có viền - block) set được width height
+     -->
+
+    <!-- pseudo tag: tag giả | thẻ mà không có chức năng
+      span: display inline
+      div: display block
+     -->
+    <p>
+      <span style="font-size: 30px; text-decoration: line-through; color: red"
+        >X</span
+      >in chào bạn
+    </p>
+
+    <!-- demo div -->
+
+    <div style="color: red">
+      <p>Người giàu sống tình cảm</p>
+      <p>Ai cũng có thể nên giàu có</p>
+      <p>Nếu ba má họ giàu sẵn</p>
+    </div>
+
+    <!-- Bài tập -->
+    <p style="color: red">
+      Lòng ta trống lắm, lòng ta sụp <br />
+      Như túp nhà không bốn vách xiêu; <br />
+      Em chẳng cứu giùm, em bỏ mặc <br />
+      Mưa đưa ta đến bến Đìu hiu. <br />
+    </p>
+
+    <p style="text-align: right; color: blue">
+      Em ở bên mình; ta ngó say, <br />
+      Song le bên ấy với bên này <br />
+      Cũng xa như những bờ xa cách, <br />
+      Không có thuyền qua, không cánh bay. <br />
+    </p>
+
+    <p style="color: red">
+      Ta thấy em xinh, khẽ lắc đầu. <br />
+      Bởi vì ta có được em đâu! <br />
+      Tay kia sẽ ấp nhiều tay khác, <br />
+      Môi ấy vì ai sẽ đượm mầu. <br />
+    </p>
+
+    <!-- a: hyper link references - link: inline-->
+    <p>
+      <a
+        href="https://www.google.com.vn/?hl=vi"
+        target="_blank"
+        style="color: black; text-decoration: none; cursor: default"
+        >Dẫn đến tri thức</a
+      >
+    </p>
+
+    <p><a href="#alo">Đường đến alo</a></p>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta fugiat
+      asperiores dolorem quasi. Dolorem, aliquam. Veritatis, reiciendis ad
+      provident illo dolor sapiente obcaecati asperiores assumenda expedita
+      quibusdam soluta vel! Fugiat! Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Aut doloribus nobis, non dicta ab maiores in, obcaecati
+      laudantium quas cupiditate unde assumenda dolorum pariatur rerum mollitia
+      eius nam voluptas minima. Lorem ipsum, dolor sit amet consectetur
+      adipisicing elit. Cupiditate ipsum expedita ea rerum. Nesciunt laboriosam
+      perspiciatis dolor architecto ratione maiores. Repellendus, ad ducimus.
+      Nostrum ratione sunt qui eius cumque provident! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Sunt ducimus, ab, autem quidem quo vero
+      neque doloremque nostrum similique deleniti eveniet dolor, cupiditate quos
+      harum labore magni excepturi odio at. Lorem ipsum dolor sit, amet
+      consectetur adipisicing elit. Id beatae, error quas excepturi praesentium
+      sed maiores! Quas praesentium nam quam aliquid officia, libero in, qui
+      fugiat maxime, vero quibusdam laborum. Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Debitis consequatur ducimus harum? Et
+      impedit excepturi minima unde delectus corporis, deserunt vel rerum culpa
+      vitae perspiciatis quia, soluta Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Sed illo autem quod dicta optio reiciendis molestiae,
+      quia veniam earum tempora iste quasi velit aut explicabo quo nam itaque
+      nostrum nisi! adipisci alias tempora! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Nisi hic modi sint quam quas facere
+      provident expedita. Lorem ipsum dolor sit amet consectetur adipisicing
+      elit. Dicta fugiat asperiores dolorem quasi. Dolorem, aliquam. Veritatis,
+      reiciendis ad provident illo dolor sapiente obcaecati asperiores assumenda
+      expedita quibusdam soluta vel! Fugiat! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Aut doloribus nobis, non dicta ab maiores
+      in, obcaecati laudantium quas cupiditate unde assumenda dolorum pariatur
+      rerum mollitia eius nam voluptas minima. Lorem ipsum, dolor sit amet
+      consectetur adipisicing elit. Cupiditate ipsum expedita ea rerum. Nesciunt
+      laboriosam perspiciatis dolor architecto ratione maiores. Repellendus, ad
+      ducimus. Nostrum ratione sunt qui eius cumque provident! Lorem ipsum dolor
+      sit amet consectetur adipisicing elit. Sunt ducimus, ab, autem quidem quo
+      vero neque doloremque nostrum similique deleniti eveniet dolor, cupiditate
+      quos harum labore magni excepturi odio at. Lorem ipsum dolor sit, amet
+      consectetur adipisicing elit. Id beatae, error quas excepturi praesentium
+      sed maiores! Quas praesentium nam quam aliquid officia, libero in, qui
+      fugiat maxime, vero quibusdam laborum. Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Debitis consequatur ducimus harum? Et
+      impedit excepturi minima unde delectus corporis, deserunt vel rerum culpa
+      vitae perspiciatis quia, soluta Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Sed illo autem quod dicta optio reiciendis molestiae,
+      quia veniam earum tempora iste quasi velit aut explicabo quo nam itaque
+      nostrum nisi! adipisci alias tempora! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Nisi hic modi sint quam quas facere
+      provident expedita. Lorem ipsum dolor sit amet consectetur adipisicing
+      elit. Dicta fugiat asperiores dolorem quasi. Dolorem, aliquam. Veritatis,
+      reiciendis ad provident illo dolor sapiente obcaecati asperiores assumenda
+      expedita quibusdam soluta vel! Fugiat! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Aut doloribus nobis, non dicta ab maiores
+      in, obcaecati laudantium quas cupiditate unde assumenda dolorum pariatur
+      rerum mollitia eius nam voluptas minima. Lorem ipsum, dolor sit amet
+      consectetur adipisicing elit. Cupiditate ipsum expedita ea rerum. Nesciunt
+      laboriosam perspiciatis dolor architecto ratione maiores. Repellendus, ad
+      ducimus. Nostrum ratione sunt qui eius cumque provident! Lorem ipsum dolor
+      sit amet consectetur adipisicing elit. Sunt ducimus, ab, autem quidem quo
+      vero neque doloremque nostrum similique deleniti eveniet dolor, cupiditate
+      quos harum labore magni excepturi odio at. Lorem ipsum dolor sit, amet
+      consectetur adipisicing elit. Id beatae, error quas excepturi praesentium
+      sed maiores! Quas praesentium nam quam aliquid officia, libero in, qui
+      fugiat maxime, vero quibusdam laborum. Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Debitis consequatur ducimus harum? Et
+      impedit excepturi minima unde delectus corporis, deserunt vel rerum culpa
+      vitae perspiciatis quia, soluta Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Sed illo autem quod dicta optio reiciendis molestiae,
+      quia veniam earum tempora iste quasi velit aut explicabo quo nam itaque
+      nostrum nisi! adipisci alias tempora! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Nisi hic modi sint quam quas facere
+      provident expedita. Lorem ipsum dolor sit amet consectetur adipisicing
+      elit. Dicta fugiat asperiores dolorem quasi. Dolorem, aliquam. Veritatis,
+      reiciendis ad provident illo dolor sapiente obcaecati asperiores assumenda
+      expedita quibusdam soluta vel! Fugiat! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Aut doloribus nobis, non dicta ab maiores
+      in, obcaecati laudantium quas cupiditate unde assumenda dolorum pariatur
+      rerum mollitia eius nam voluptas minima. Lorem ipsum, dolor sit amet
+      consectetur adipisicing elit. Cupiditate ipsum expedita ea rerum. Nesciunt
+      laboriosam perspiciatis dolor architecto ratione maiores. Repellendus, ad
+      ducimus. Nostrum ratione sunt qui eius cumque provident! Lorem ipsum dolor
+      sit amet consectetur adipisicing elit. Sunt ducimus, ab, autem quidem quo
+      vero neque doloremque nostrum similique deleniti eveniet dolor, cupiditate
+      quos harum labore magni excepturi odio at. Lorem ipsum dolor sit, amet
+      consectetur adipisicing elit. Id beatae, error quas excepturi praesentium
+      sed maiores! Quas praesentium nam quam aliquid officia, libero in, qui
+      fugiat maxime, vero quibusdam laborum. Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Debitis consequatur ducimus harum? Et
+      impedit excepturi minima unde delectus corporis, deserunt vel rerum culpa
+      vitae perspiciatis quia, soluta Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Sed illo autem quod dicta optio reiciendis molestiae,
+      quia veniam earum tempora iste quasi velit aut explicabo quo nam itaque
+      nostrum nisi! adipisci alias tempora! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Nisi hic modi sint quam quas facere
+      provident expedita. Lorem ipsum dolor sit amet consectetur adipisicing
+      elit. Dicta fugiat asperiores dolorem quasi. Dolorem, aliquam. Veritatis,
+      reiciendis ad provident illo dolor sapiente obcaecati asperiores assumenda
+      expedita quibusdam soluta vel! Fugiat! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Aut doloribus nobis, non dicta ab maiores
+      in, obcaecati laudantium quas cupiditate unde assumenda dolorum pariatur
+      rerum mollitia eius nam voluptas minima. Lorem ipsum, dolor sit amet
+      consectetur adipisicing elit. Cupiditate ipsum expedita ea rerum. Nesciunt
+      laboriosam perspiciatis dolor architecto ratione maiores. Repellendus, ad
+      ducimus. Nostrum ratione sunt qui eius cumque provident! Lorem ipsum dolor
+      sit amet consectetur adipisicing elit. Sunt ducimus, ab, autem quidem quo
+      vero neque doloremque nostrum similique deleniti eveniet dolor, cupiditate
+      quos harum labore magni excepturi odio at. Lorem ipsum dolor sit, amet
+      consectetur adipisicing elit. Id beatae, error quas excepturi praesentium
+      sed maiores! Quas praesentium nam quam aliquid officia, libero in, qui
+      fugiat maxime, vero quibusdam laborum. Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Debitis consequatur ducimus harum? Et
+      impedit excepturi minima unde delectus corporis, deserunt vel rerum culpa
+      vitae perspiciatis quia, soluta Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Sed illo autem quod dicta optio reiciendis molestiae,
+      quia veniam earum tempora iste quasi velit aut explicabo quo nam itaque
+      nostrum nisi! adipisci alias tempora! Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Nisi hic modi sint quam quas facere
+      provident expedita.
+      <span id="alo">Đường đến alo</span> Dolor, sit quod corrupti, molestiae
+      iusto necessitatibus nemo dolores porro exercitationem nulla optio!
+    </p>
+    <!-- a: bookmark -->
+  </body>
+</html>

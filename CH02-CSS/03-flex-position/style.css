@@ -1,0 +1,141 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+body {
+  font-size: 1.6rem;
+}
+
+.cha {
+  border: 3px solid black;
+  display: flex;
+}
+
+.con1 {
+  border: 3px solid red;
+  width: 10rem;
+  height: 10rem;
+}
+
+.con2 {
+  border: 3px solid blue;
+  width: 10rem;
+  height: 10rem;
+}
+
+.chu {
+  border: 3px solid black;
+  display: flex;
+}
+
+.chau {
+  border: 3px solid red;
+  width: 30rem;
+  padding: 1rem;
+}
+.chac {
+  border: 3px solid blue;
+  width: calc(100% - 30%);
+  padding: 1rem;
+}
+
+/* demo position */
+.big-div {
+  border: 3px solid green;
+  width: 25rem;
+  position: relative;
+}
+
+.small-div {
+  border: 3px solid blue;
+  background-color: aqua;
+  /* position: relative;
+  top: 5rem;
+  left: 2rem; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* z-index: chỉ sử dụng khi có position; */
+}
+/* static: bât động, mặc định của các thẻ
+  relative: xuất hồn, thaost xác, bỏ lại xác, còn hồn thì đi, 
+      căn chỉnh vị trí so với trạng thái static
+  absolute: thoát toàn bộ khỏi cha, nằm đè lên cha
+      nó sẽ căn chỉnh theo cha, nhưng nó không nhận static làm cha
+*/
+
+/* .demo-sticky {
+  position: sticky;
+  top: 0;
+} */
+
+.btn-fb {
+  border: 3px solid black;
+  width: 5rem;
+  height: 5rem;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  position: fixed;
+  right: 3px;
+  bottom: 10px;
+}
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 
+pseudo tag: span và div
+pseudo class: visited unvisited active hver forcus
+psuedo elemt: ::after ::before */
+
+/* DOM ảo, là con của ahihi */
+.ahihi::before {
+  content: "hihi";
+}
+
+.ahihi::after {
+  content: "huhu";
+}
+
+/* demo button */
+.demo-btn {
+  margin: 3rem;
+  padding: 1rem;
+  border: 1px solid hotpink;
+  background-color: transparent;
+  color: hotpink;
+  position: relative;
+}
+
+.demo-btn::after {
+  content: "";
+  background-color: hotpink;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 0%;
+  z-index: -1;
+  transition: 0.3s;
+}
+
+.demo-btn:hover::after {
+  left: 0;
+  width: 100%;
+}
+
+.demo-btn:hover {
+  color: white;
+}

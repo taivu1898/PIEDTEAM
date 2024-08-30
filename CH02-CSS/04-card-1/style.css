@@ -1,0 +1,68 @@
+/* card */
+.container {
+  /* border: 1px solid red; */
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+.card-carousel {
+  /* border: 1px solid green; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 1320 - 10 = 1310 / 5 : 262px - 6(margin) = 256 là kích thước của card__block */
+.card__block {
+  width: 25.6rem;
+  border: 1px solid #eeeeee;
+  margin: 0.3rem;
+  background-color: #fafafa;
+  padding: 0.3rem;
+  transition: 0.3s;
+}
+
+.card__block:hover {
+  box-shadow: 3px 3px 8px 5px #695e5e;
+}
+
+.card-img {
+  width: 24.8rem;
+  overflow: hidden;
+  /* Vật thể bị lòi thì giấu */
+}
+
+.card-img img {
+  display: block;
+  width: 100%;
+}
+
+.card-info {
+  margin: 0 0.3rem 0;
+}
+
+.card_controller {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card_controller__block {
+  width: calc(50% - 1px);
+}
+
+.btn-card__controller {
+  display: flex;
+  background-color: teal;
+  height: 3rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  color: white;
+}
+
+.btn-card__controller:hover {
+  background-color: rgb(7, 161, 161);
+  transition: 0.3s;
+}

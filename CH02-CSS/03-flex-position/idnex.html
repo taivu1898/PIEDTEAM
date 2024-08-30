@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài 3: Flex và Position</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Đường link ở dưới cùng -->
+  </head>
+  <body>
+    <!-- font -->
+    <p>
+      Quang Trung Nguyễn Huệ là hai anh em, đó là người nào nói vậy <br />
+      Còn tôi, thì họ là một người duy nhất.
+    </p>
+    <div class="demo-sticky">Tôi là Sticky</div>
+    <!-- flex
+     Cách 1: inline-block + font-size
+     Cách 2: float + clearfix - 2010 Thời hoàng kim bootstrap
+     
+     2015: flex: linh hoạt | grid: lưới
+     flex: thay thế cho các cách chia layout cũ
+     -->
+
+    <!-- Demo dùng flex cơ bản -->
+    <div class="cha">
+      <div class="con1"></div>
+      <div class="con2"></div>
+    </div>
+    <!-- Trục chính là justify, Trục phụ align
+     Không được nói dọc và ngang, vì nó đổi liên tục
+     content: là điều khiển khoảng hở giữa các khối items
+     items: điều khiển cả khối các items cùng dịch chuyển -->
+
+    <!-- demo flex -->
+    <div class="chu">
+      <div class="chau">
+        <h1>Anh Cháu rất quý cô chắc</h1>
+        <p>nhà anh cháu bên trái nahf cô chắc</p>
+        <p>
+          mà chaswcs óc thẻ vnhuw cố chắc không mấy tghienej ciarm coiqawsd av
+          cố cháu
+        </p>
+      </div>
+      <div class="chac">
+        <h1>nhà cố chắc bên phải nhà cô cháu</h1>
+        <p>Cối chắc biết anh cháu rất quý mình <br /></p>
+        <p>
+          Nhưng chắc là chắc chắn không thích anh cháu
+          <br />
+        </p>
+        <p>vì anh cháu dùng dép đôn chề <br /></p>
+        <p>
+          Anh cháu troll với jonny den
+          <br />
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil eum
+          voluptate rem aliquam, doloremque quis quaerat sit sint maxime dolores
+          tempora magni voluptatibus sunt ipsa non placeat deleniti veniam
+          accusamus.
+        </p>
+        <p>họ cùng nhau là đbrr <br /></p>
+      </div>
+    </div>
+    <!-- demo positions: thằng này kiếm tiền -->
+    <div class="big-div">
+      <div class="small-div">Tôi là div nhỏ</div>
+      <p>
+        Ahihi xin chào cuộc đời <br />
+        DÙ nhiều lần làm ta chơi với <br />
+        Tuy học ít mà chơi lại nhiều <br />
+        CHiều ăn bánh tối lại vào hang <br />
+        Ahihi xin chào cuộc đời <br />
+        DÙ nhiều lần làm ta chơi với <br />
+      </p>
+    </div>
+    <!-- btn-fb -->
+    <div class="btn-fb">
+      <div class="icon">F</div>
+    </div>
+    <!-- pseudo elemet -->
+    <div class="ahihi">xin chaof`</div>
+    <!-- Siêu button cực cháy, cực căng -->
+    <button class="demo-btn">BUTTON</button>
+    <!--  -->
+    <div style="height: 100vh"></div>
+  </body>
+</html>

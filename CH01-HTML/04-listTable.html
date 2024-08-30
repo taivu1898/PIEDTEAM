@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài 04: list và table</title>
+		<style>
+			.demo-table, .demo-table td {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+			.test {
+				text-align: center;
+			}
+		</style>
+  </head>
+  <body>
+    <!-- 
+    list: danh sách liệt kê: ul ol dl
+    ol: ordered list: danh sách có thứ tự
+      -->
+    <ol type="I">
+      <li>Cà phê sữa</li>
+      <li>Cà phê đá</li>
+      <li>Cà phê muối</li>
+    </ol>
+    <!-- ul: unordered list: danh sách không có thứ tự -->
+    <ul style="list-style-type: none">
+      <li>Cà phê sữa</li>
+      <li>Cà phê đặc</li>
+      <li>Cà phê Muối</li>
+    </ul>
+    <!-- Một lỗi sai của tất cả mọi người lúc mới học -->
+    <ul>
+      <li>
+        Cà Phê
+        <ul>
+          <li>Cà Phê Sữa</li>
+          <li>Cà Phê Đá</li>
+          <li>Cà Phê Muối</li>
+        </ul>
+      </li>
+      <li>
+        Rượu
+        <ul>
+          <li>Gin</li>
+          <li>Rum</li>
+          <li>Henessy</li>
+        </ul>
+      </li>
+    </ul>
+    <!-- table -->
+    <table class="demo-table">
+      <tr>
+        <td class="test" colspan="2">1</td>
+        <!-- <td>2</tb> -->
+        <td rowspan="2">3</tb>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>5</td>
+        <!-- <td>6</td> -->
+      </tr>
+      <tr>
+        <td class="test" colspan="3">7</td>
+        <!-- <td>8</td>
+        <td>9</td> -->
+      </tr>
+    </table>
+		
+		<!-- table>tr*9>td*5 -->
+		
+  </body>
+</html>

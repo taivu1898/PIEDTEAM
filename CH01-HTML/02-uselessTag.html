@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài 2: tag vô dụng</title>
+    <!-- css -->
+    <style>
+      /* 3 cách selector */
+      p {
+        color: rebeccapurple;
+      }
+
+      p:nth-child(2) {
+        color: blue;
+      }
+      .dacbiet {
+        font-style: italic;
+      }
+      .dacbiet2 {
+        font-size: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Quotations -->
+    <p class="dacbiet">
+      Có một người từng nói rằng "một cây làm chẳng nên non ba cây chụm lại vẫn
+      là ba cây"
+    </p>
+    <p class="dacbiet">
+      Có một người từng nói rằng
+      <q class="dacbiet2"
+        >một cây làm chẳng nên non ba cây chụm lại vẫn là ba cây</q
+      >
+    </p>
+    <!-- abbr: inline -->
+    <p>Công chúa thuộc về <abbr title="Lê Điệp">người đẹp trai nhất</abbr></p>
+    <!-- address -->
+    <address>114/13 Đình Phong Phú</address>
+    <!-- cite -->
+    <p>Tác phẩm này của <cite>viEmVanGood</cite></p>
+    <!-- bdo -->
+    <bdo dir="rtl">Xin chào bạn</bdo>
+    <p style="background-color: teal">demo đổi màu nền</p>
+  </body>
+</html>

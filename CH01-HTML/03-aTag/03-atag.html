@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=a, initial-scale=1.0" />
+    <title>Bài 03 - a tag hacking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- redirect -->
+    <a href="#abc">click me</a>
+    <!-- 
+    link status (pseudo class)
+    unvisited: chưa bấm vào, chưa ghép thăm (blue)
+    active: đang đè chuột (red) - thẻ nào cũng có
+    visited: đã truy cập (purple)
+    hover: đưa chuột vào (nowea - thẻ nào cũng có
+    -->
+    <a class="demo-status" href="#1">Click Me !</a>
+    <!-- button: nút -->
+    <button>Nút nè</button>
+    <!-- Dùng thẻ a để cosplay button -->
+    <a class="demo-btn" href="mailto:lehodiep.1999@gmail.com">Send nude</a>
+
+    <!-- Thẻ a dùng làm banner -->
+    <a href="https://fpt.com/vi">
+      <img src="./logo-fpt.jpg" alt="" />
+    </a>
+  </body>
+</html>

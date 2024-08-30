@@ -1,0 +1,81 @@
+/* reset css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%; /* kích thước 10px */
+}
+
+body {
+  font-size: 1.6rem;
+}
+/* 
+	unit size là đơn vị đơ
+  px | milimet | cm 
+  %: ăn theo thằng cha
+  em: coi font-size của thằng cha là một đơn vị
+  rem: coi font-size của html là một đơn vị (font-size: 16px)
+  */
+
+/* 
+	outline 
+	*/
+.demo-ipt {
+  outline: none;
+  margin: 2rem;
+  padding: 1rem;
+  border: 2px solid red;
+  outline: 2px solid blue;
+  outline-offset: 1rem;
+}
+
+/* border */
+.demo-border {
+  border: 3px solid teal;
+  border-style: solid;
+  border-top: 3px solid red;
+  border-left: 3px solid yellow;
+  border-right: 3px solid blue;
+  border-bottom: 3px solid rebeccapurple;
+  border-radius: 0.3rem;
+}
+
+.circle {
+  height: 30rem;
+  width: 30rem;
+  /* Cho hình vuông thành hình vuông trước */
+  background-color: blueviolet;
+  border-radius: 50%; /* 15rem */
+}
+
+.triangle {
+  border: 3px solid red;
+  height: 15rem;
+  width: 15rem;
+  /* Màu trong suốt là transparent */
+  border-top: 7.5rem solid transparent;
+  border-left: 7.5rem solid transparent;
+  border-right: 7.5rem solid transparent;
+  border-bottom: 7.5rem solid rebeccapurple;
+}
+
+.demo-text {
+  /* quy tắc bem */
+  color: steelblue;
+  background-color: bisque;
+  font-size: 3rem;
+  text-decoration: underline solid chartreuse;
+  text-indent: 3rem; /* thụt lề */
+  /* line-height: 10rem; khoảng cách giữa các dòng */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  text-shadow: -4px 2px 3px black;
+}
+
+.demo-text span {
+  vertical-align: sub;
+}

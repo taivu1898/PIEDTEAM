@@ -1,0 +1,64 @@
+header {
+  background-color: blueviolet;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5%;
+  display: flex;
+}
+
+.bg {
+  height: 100vh;
+  background-color: aquamarine;
+  background-image: url(./img/nvchad.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+li,
+a,
+button {
+  text-decoration: none;
+  font-weight: 5000;
+  font-size: 25px;
+}
+
+.nav__links {
+  list-style: none;
+  display: flex;
+  gap: 200px;
+  align-items: center;
+}
+
+.nav__links li {
+  display: inline-block;
+  padding: 0px;
+  color: black;
+}
+.nav__links li a {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav__links li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 3px; /* Độ dày của underline */
+  background-color: rgb(42, 151, 165); /* Màu của underline */
+  left: 0;
+  bottom: -5px; /* Khoảng cách từ underline tới text */
+  transition: width 0.3s ease; /* Hiệu ứng chuyển đổi độ dài */
+}
+
+.nav__links li a:hover::after {
+  width: 100%; /* Độ dài underline khi hover */
+}

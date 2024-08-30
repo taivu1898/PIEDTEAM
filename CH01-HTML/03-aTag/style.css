@@ -1,0 +1,40 @@
+/* 
+ model box
+
+ margin: khoảng cách từ viền so với các vật thể khác
+ border: đường viền
+ padding: khoảng cách từ viền vào content -- ưu tiên
+ content: nội dung
+ */
+
+.demo-status {
+  color: teal;
+}
+
+.demo-status:hover {
+  color: purple;
+}
+
+.demo-status:active {
+  color: blue !important;
+}
+
+/* demo-btn */
+.demo-btn {
+  display: inline-block;
+  border: 1px solid black;
+  /* độ dày, kiểu, màu sắc */
+  text-decoration: none;
+  text-transform: uppercase;
+  color: black;
+  font-family: sans-serif;
+  font-weight: 700; /* Mặc định, thin 400 */
+  padding: 10px 15px;
+  margin: 10px;
+  transition: 0.5s;
+}
+
+.demo-btn:hover {
+  color: white;
+  background-color: black;
+}

@@ -1,0 +1,32 @@
+/* reset css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%; /* 10px */
+  font-family: "Times New Roman", Times, serif;
+}
+
+body {
+  font-size: 1.6rem; /* 1.6 * 10px */
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #3d1c1c 0%,
+    rgba(17, 23, 41, 0) 100%
+  );
+}
+
+/* add code there */
+
+.container {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.title__header {
+  border: 1px solid black;
+  padding: 1rem;
+}
