@@ -91,4 +91,3 @@ document.querySelector("#play-again").addEventListener("click", () => {
     item.style.pointerEvents = ""; // khoi phuc kha nang click
   });
 });
-

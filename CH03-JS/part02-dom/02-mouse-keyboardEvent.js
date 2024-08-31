@@ -53,4 +53,3 @@ console.log(object);
 // on boostrap
 // function
 // bai hom nay
-

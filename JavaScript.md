@@ -49,6 +49,27 @@ const profile = {
 };
 ```
 
+> Một đối tượng sẽ được tham chiếu tới một vùng nhớ nằm ở `stack`, đối tượng và thuộc tính sẽ ở `heap`
+
+`const` (hằng số) sẽ là tham chiếu hằng, ví dụ như `profile`
+
 ### Scope
 
+Có 3 loại `scope`:
+
+1. **Global Scope**: `var`
+
+```js
+if (true) {
+  var x = 10;
+}
+
+console.log(x);
+```
+
+2. **Block Scope**: `const`, `let`
+3. **Function Scope**: `var`
+
 ### Hoisting
+
+Các biến được khai báo bằng `var` được hoitsed, nghĩa là khai báo biến được đưa lên đầu phạm vi nhưng giá trị thì không được hoisted
