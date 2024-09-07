@@ -1,0 +1,4 @@
+D001|Diep	|red	|2.20|Vong back kim
+D002|Tuan	|yellow	|5.20|Vong kim Cuong
+C001|Tung	|brown	|7.30|Ribbon kim
+D003|Cuong	|blue	|2.60|Vong I <3 you
