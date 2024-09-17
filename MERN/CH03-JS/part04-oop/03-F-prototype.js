@@ -51,9 +51,9 @@ console.log(rollRoyce);
 function Animal(name) {
   this.name = name;
   // prototype: class Animal
-  //            constructor(name) {
-  //              this.name = name
-  //              prototype: class Animal(...)
+  //   constructor(name) {
+  //     this.name = name
+  //     prototype: class Animal(...)
   //            }
 }
 
