@@ -1,22 +1,22 @@
 const baseURL = "https://66fb75a38583ac93b40bd2e5.mockapi.io/users";
 
-// class + promise + fetch
+// class + promise + async await
 class FastHttp {
-  send(method, url, body) {
-    return fetch(url, {
+  async send(method, url, body) {
+    let response = await fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
       },
       body: body ? JSON.stringify(body) : null,
-    }).then((response) => {
-      if (response.ok) {
-        return response.json(); // Khui hàng
-      } else {
-        throw new Error(response.statusText);
-      }
     });
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
+    }
   }
+
   get(url) {
     return this.send("GET", url, null);
   }
@@ -32,12 +32,11 @@ class FastHttp {
 }
 
 let http = new FastHttp();
-http // get(baseURL)
-  //.delete(`${baseURL}/6`)
-  //.post(baseURL, {
-  //  name: "Tài Chó Điên",
-  //})
-  .put(`${baseURL}/2`, { name: "NvChad" })
-  .then((data) => {
+(async () => {
+  try {
+    let data = await http.put(`${baseURL}/2`, { name: "Lunar Vim" });
     console.log(data);
-  });
+  } catch (err) {
+    console.log(err);
+  }
+})();
