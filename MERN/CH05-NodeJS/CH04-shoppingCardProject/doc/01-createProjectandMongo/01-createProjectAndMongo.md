@@ -349,7 +349,7 @@ usersRouter.use(
   (req, res, next) => {
     console.log("Time2: ", Date.now());
     next();
-  }
+  },
 );
 ```
 
@@ -366,7 +366,7 @@ usersRouter.use(
   (req, res, next) => {
     console.log("Time2: ", Date.now());
     next();
-  }
+  },
 );
 ```
 
@@ -400,7 +400,7 @@ usersRouter.use(
   (req, res, next) => {
     console.log("Time2: ", Date.now());
     next();
-  }
+  },
 );
 
 usersRouter.get("/get-me", (req, res) => {
@@ -438,6 +438,8 @@ test lại xem thử có lỗi lầm gì hông
 ## III - Cấu trúc thư mục của dự án
 
 cấu trúc dự án
+
+```bash
 📦nodejs-typescript
 ┣ 📂dist
 ┣ 📂src
@@ -494,6 +496,8 @@ cấu trúc dự án
 ┣ 📜package.json
 ┣ 📜tsconfig.json
 ┗ 📜yarn.lock
+```
+
 Giải thích các thư mục:
 
 dist: Thư mục chứa các file build
@@ -531,7 +535,7 @@ Còn lại là những file config cho project như .eslintrc, .prettierrc, ... 
     export const loginValidator = (
       req: Request,
       res: Response,
-      next: NextFunction
+      next: NextFunction,
     ) => {
       // ta vào body lấy email, password ra
       console.log(req.body); //log xem có gì
@@ -712,7 +716,7 @@ app handler > route handler gồm: middleware > controller > service > trả ra 
       // gữi tính hiệu kết nối lên server
       await client.db("admin").command({ ping: 1 });
       console.log(
-        "Pinged your deployment. You successfully connected to MongoDB!"
+        "Pinged your deployment. You successfully connected to MongoDB!",
       );
     } catch (err) {
       console.error(err);
@@ -758,7 +762,7 @@ app handler > route handler gồm: middleware > controller > service > trả ra 
         // gữi tính hiệu kết nối lên server
         await this.client.db("admin").command({ ping: 1 });
         console.log(
-          "Pinged your deployment. You successfully connected to MongoDB!"
+          "Pinged your deployment. You successfully connected to MongoDB!",
         );
       } catch (error) {
         console.log(error);
