@@ -1,6 +1,7 @@
 import User from '~/models/schemas/User.schema'
 import databaseServices from './database.services'
 import { RegisterReqBody } from '~/models/requests/users.request'
+import { hashPassword } from '~/utils/crypto'
 
 class UsersServices {
   async checkEmailExist(email: string): Promise<Boolean> {
@@ -9,10 +10,13 @@ class UsersServices {
   }
 
   async register(payload: RegisterReqBody) {
-    const { email, password } = payload
     // Gọi server lưu vào
     const result = await databaseServices.users.insertOne(
-      new User({ ...payload, date_of_birth: new Date(payload.date_of_birth) })
+      new User({
+        ...payload,
+        password: hashPassword(payload.password),
+        date_of_birth: new Date(payload.date_of_birth)
+      })
     )
     return result
   }

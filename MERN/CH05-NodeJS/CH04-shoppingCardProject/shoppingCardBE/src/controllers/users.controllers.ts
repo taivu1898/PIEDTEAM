@@ -28,7 +28,7 @@ export const loginController = (req: Request, res: Response) => {
 // registerController nhận vào thông tin đăng ký của người dùng
 // và vào db để tạo user mới lưu vào
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
-  const { email, password } = req.body
+  const { email } = req.body
   // Vào db và nhét vào collection users
   try {
     // Kiểm tra email đc gửi lên có tồn tại chưa
