@@ -1,9 +1,9 @@
 // Controller là handler có nhiệm vụ xử lý logic các thông tin khi đã vào controller thì phải clean
 
 import { Request, Response } from 'express'
-import User from '~/models/schemas/User.schema'
-import databaseServices from '~/services/database.services'
+import { RegisterReqBody } from '~/models/requests/users.request'
 import usersServices from '~/services/users.services'
+import { ParamsDictionary } from 'express-serve-static-core'
 
 export const loginController = (req: Request, res: Response) => {
   // Vào đây là không kiểm tra dữ liệu nữa, chỉ cần dùng thôi
@@ -27,11 +27,21 @@ export const loginController = (req: Request, res: Response) => {
 
 // registerController nhận vào thông tin đăng ký của người dùng
 // và vào db để tạo user mới lưu vào
-export const registerController = async (req: Request, res: Response) => {
+export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
   const { email, password } = req.body
   // Vào db và nhét vào collection users
   try {
-    const result = await usersServices.register({ email, password })
+    // Kiểm tra email đc gửi lên có tồn tại chưa
+    const isDup = await usersServices.checkEmailExist(email)
+    if (isDup) {
+      const customError = new Error('Email has been use')
+      Object.defineProperty(customError, 'message', {
+        enumerable: true
+      })
+      throw customError
+    }
+
+    const result = await usersServices.register(req.body)
     res.status(201).json({
       massage: 'Register success',
       data: result

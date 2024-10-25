@@ -6,6 +6,8 @@ import databaseServices from './services/database.services'
 const app = express()
 const PORT = 2020
 
+console.log(new Date(2004, 8, 9).toISOString())
+
 // Kết nối db
 databaseServices.connect()
 
