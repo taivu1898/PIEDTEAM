@@ -3,7 +3,7 @@
 import { ValidationChain, validationResult } from 'express-validator'
 import { RunnableValidationChains } from 'express-validator/lib/middlewares/schema'
 import { Request, Response, NextFunction } from 'express'
-import { ErrorWithStatus } from '~/models/Errors'
+import { EntityError, ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/htppStatus'
 
 export const validate = (validation: RunnableValidationChains<ValidationChain>) => {
@@ -13,7 +13,10 @@ export const validate = (validation: RunnableValidationChains<ValidationChain>) 
     if (errors.isEmpty()) {
       return next()
     } else {
-      const errorsObject = errors.mapped()
+      const errorsObject = errors.mapped() // Danh sách các lỗi dạng Object
+      const entityError = new EntityError({ errors: {} }) // Đây là Object lỗi mà mình muốn thay thế
+
+      // Duyệt key
       for (const key in errorsObject) {
         // Lấy msg trong từng trường dữ liệu của errorsObject ra
         const { msg } = errorsObject[key]
@@ -21,6 +24,8 @@ export const validate = (validation: RunnableValidationChains<ValidationChain>) 
         if (msg instanceof ErrorWithStatus && msg.status != HTTP_STATUS.UNPROCESSABLE_ENTITY) {
           return next(msg)
         }
+        // Nếu không phải dạng đặc biệt thì bỏ vào entityError
+        entityError.errors[key] = msg
       }
 
       res.status(422).json({
