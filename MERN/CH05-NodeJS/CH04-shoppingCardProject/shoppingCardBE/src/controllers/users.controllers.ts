@@ -4,6 +4,8 @@ import { NextFunction, Request, Response } from 'express'
 import { RegisterReqBody } from '~/models/requests/users.request'
 import usersServices from '~/services/users.services'
 import { ParamsDictionary } from 'express-serve-static-core'
+import { ErrorWithStatus } from '~/models/Errors'
+import HTTP_STATUS from '~/constants/htppStatus'
 
 export const loginController = (req: Request, res: Response) => {
   // Vào đây là không kiểm tra dữ liệu nữa, chỉ cần dùng thôi
@@ -36,15 +38,13 @@ export const registerController = async (
   const { email } = req.body
   // Vào db và nhét vào collection users
 
-  throw new Error('Lỗi rớt mạng')
   // Kiểm tra email đc gửi lên có tồn tại chưa
   const isDup = await usersServices.checkEmailExist(email)
   if (isDup) {
-    const customError = new Error('Email has been use')
-    Object.defineProperty(customError, 'message', {
-      enumerable: true
+    throw new ErrorWithStatus({
+      status: HTTP_STATUS.UNPROCESSABLE_ENTITY, // 422
+      message: 'Email has been used'
     })
-    throw customError
   }
 
   const result = await usersServices.register(req.body)

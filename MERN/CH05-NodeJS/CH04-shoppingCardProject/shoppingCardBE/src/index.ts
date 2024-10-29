@@ -17,8 +17,8 @@ app.use(express.json())
 app.use('/users', userRouter)
 
 // Xử lý lỗi tổng
-userRouter.use((err, req, res, next) => {
-  res.status(400).json({ message: err.message })
+app.use((err, req, res, next) => {
+  res.status(err.status).json({ message: err.message })
 })
 
 // Cho server ở PORT 2020

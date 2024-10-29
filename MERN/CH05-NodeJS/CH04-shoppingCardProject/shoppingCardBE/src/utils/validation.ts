@@ -3,6 +3,8 @@
 import { ValidationChain, validationResult } from 'express-validator'
 import { RunnableValidationChains } from 'express-validator/lib/middlewares/schema'
 import { Request, Response, NextFunction } from 'express'
+import { ErrorWithStatus } from '~/models/Errors'
+import HTTP_STATUS from '~/constants/htppStatus'
 
 export const validate = (validation: RunnableValidationChains<ValidationChain>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -11,9 +13,19 @@ export const validate = (validation: RunnableValidationChains<ValidationChain>) 
     if (errors.isEmpty()) {
       return next()
     } else {
+      const errorsObject = errors.mapped()
+      for (const key in errorsObject) {
+        // Lấy msg trong từng trường dữ liệu của errorsObject ra
+        const { msg } = errorsObject[key]
+        // Nếu msg có dạng ErrorWithStatus và có status dạng 422 thì mình next(err) nó ra trước
+        if (msg instanceof ErrorWithStatus && msg.status != HTTP_STATUS.UNPROCESSABLE_ENTITY) {
+          return next(msg)
+        }
+      }
+
       res.status(422).json({
-        message: 'Register validation failed',
-        errors: errors.mapped()
+        message: 'Invalid value',
+        errors: errorsObject
       })
     }
   }
