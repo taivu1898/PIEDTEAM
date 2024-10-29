@@ -1,6 +1,7 @@
 import express from 'express'
 import { loginController, registerController } from '~/controllers/users.controllers'
 import { loginValidator, registerValidator } from '~/middlewares/users.middlewares'
+import { wrapAsync } from '~/utils/handler'
 
 // Làm route
 const userRouter = express.Router()
@@ -19,6 +20,5 @@ userRouter.post('/login', loginValidator, loginController)
 //   data_of_birth: string nhưng có dạng ISO8601
 // }
 
-userRouter.post('/register', registerValidator, registerController)
-
+userRouter.post('/register', registerValidator, wrapAsync(registerController))
 export default userRouter
