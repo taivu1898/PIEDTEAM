@@ -20,5 +20,16 @@ userRouter.post('/login', loginValidator, loginController)
 //   data_of_birth: string nhưng có dạng ISO8601
 // }
 
+userRouter.post('/register', registerValidator, loginController)
+
+// desc: login
+// path: users / login
+// method: post
+// body: {
+//   email: string
+//   password: string
+// }
+
 userRouter.post('/register', registerValidator, wrapAsync(registerController))
+
 export default userRouter

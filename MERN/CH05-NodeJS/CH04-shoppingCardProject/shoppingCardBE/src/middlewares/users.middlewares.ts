@@ -13,23 +13,11 @@
 
 import { Request, Response, NextFunction } from 'express'
 import { checkSchema } from 'express-validator'
+import { USERS_MESSAGES } from '~/constants/messages'
 import { validate } from '~/utils/validation'
 
 // Trùng tên file thì mới default
 // Không thì export bình thường
-export const loginValidator = (req: Request, res: Response, next: NextFunction) => {
-  // console.log(req.body)
-  const { email, password } = req.body // Lấy email và password trong req ra kiểm tra
-  // Nếu một trong 2 không được gửi lên
-  if (!email || !password) {
-    res.status(400).json({
-      message: 'Missing email or password'
-    })
-  } else {
-    // Nếu không bị gì cả thì next
-    next()
-  }
-}
 
 // Viết hàm kiểm tra req.body của chức năng đăng ký tài khoản
 export const registerValidator = validate(
@@ -38,10 +26,10 @@ export const registerValidator = validate(
     // Công nghệ mới là RunnableValidationChain
     name: {
       notEmpty: {
-        errorMessage: 'Name is required'
+        errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
       },
       isString: {
-        errorMessage: 'Name must be string'
+        errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
       },
       trim: true,
       isLength: {
@@ -49,29 +37,29 @@ export const registerValidator = validate(
           min: 1,
           max: 100
         },
-        errorMessage: "Name's length must be between 1 and 100"
+        errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
       }
     },
     email: {
       notEmpty: {
-        errorMessage: 'Email is required'
+        errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
       },
       isEmail: true,
       trim: true
     },
     password: {
       notEmpty: {
-        errorMessage: 'Password is required'
+        errorMessage: USERS_MESSAGES.PASSWORD_IS_REQUIRED
       },
       isString: {
-        errorMessage: 'Password must be string'
+        errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING
       },
       isLength: {
         options: {
           min: 8,
           max: 50
         },
-        errorMessage: "Password's length must be between 8 and 50"
+        errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
       },
       isStrongPassword: {
         options: {
@@ -81,22 +69,22 @@ export const registerValidator = validate(
           minNumbers: 1,
           minSymbols: 1
         },
-        errorMessage: 'Password must be at least 8 characters. 1 lowercase, 1 uppercase, 1 number and 1 symbol'
+        errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_STRONG
       }
     },
     confirm_password: {
       notEmpty: {
-        errorMessage: 'confirm password is required'
+        errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED
       },
       isString: {
-        errorMessage: 'confirm password must be string'
+        errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_A_STRING
       },
       isLength: {
         options: {
           min: 8,
           max: 50
         },
-        errorMessage: "comfirm_password's length must be between 8 and 50"
+        errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
       },
       isStrongPassword: {
         options: {
@@ -106,13 +94,13 @@ export const registerValidator = validate(
           minNumbers: 1,
           minSymbols: 1
         },
-        errorMessage: 'confirm_password must be at least 8 characters. 1 lowercase, 1 uppercase, 1 number and 1 symbol'
+        errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_STRONG
       },
       custom: {
         options: (value, { req }) => {
           // Value lúc này là confirm_password
           if (value !== req.body.password) {
-            throw new Error(`Confirm_password doesn't match password`)
+            throw new Error(USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD)
           }
           return true
         }
@@ -128,4 +116,62 @@ export const registerValidator = validate(
       }
     }
   })
+)
+
+export const loginValidator = validate(
+  checkSchema(
+    {
+      // Công nghệ cũ là ValidationChain
+      // Công nghệ mới là RunnableValidationChain
+      name: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 100
+          },
+          errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+        }
+      },
+      email: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+        },
+        isEmail: true,
+        trim: true
+      },
+      password: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.PASSWORD_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING
+        },
+        isLength: {
+          options: {
+            min: 8,
+            max: 50
+          },
+          errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
+        },
+        isStrongPassword: {
+          options: {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+          },
+          errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_STRONG
+        }
+      }
+    },
+    ['body']
+  )
 )

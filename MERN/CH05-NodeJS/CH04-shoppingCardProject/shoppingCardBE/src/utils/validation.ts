@@ -28,10 +28,7 @@ export const validate = (validation: RunnableValidationChains<ValidationChain>) 
         entityError.errors[key] = msg
       }
 
-      res.status(422).json({
-        message: 'Invalid value',
-        errors: errorsObject
-      })
+      next(entityError)
     }
   }
 }
