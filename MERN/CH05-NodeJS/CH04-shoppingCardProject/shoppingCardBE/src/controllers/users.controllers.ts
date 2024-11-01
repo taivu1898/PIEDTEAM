@@ -1,55 +1,51 @@
-// Controller là handler có nhiệm vụ xử lý logic các thông tin khi đã vào controller thì phải clean
-
 import { NextFunction, Request, Response } from 'express'
-import { RegisterReqBody } from '~/models/requests/users.request'
+import { LoginReqBody, RegisterRequestBody } from '~/models/requests/users.request'
 import usersServices from '~/services/users.services'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ErrorWithStatus } from '~/models/Errors'
-import HTTP_STATUS from '~/constants/htppStatus'
+import HTTP_STATUS from '~/constants/httpStatus'
+import { USERS_MESSAGES } from '~/constants/messages'
+//controllers là tầng xử lí logic và call database thông qua services
 
-export const loginController = (req: Request, res: Response) => {
-  // Vào đây là không kiểm tra dữ liệu nữa, chỉ cần dùng thôi
-  const { email, password } = req.body
-  // Vào db kiểm tra xem đúng hay không ?
-  // Xà lơ
-  throw new Error('Lỗi rớt mạng')
-  if (email === 'lehodiep.1999@gmail.com' && password === 'weAreNumberOne') {
-    res.status(200).json({
-      massage: 'login success',
-      data: {
-        fname: 'Điệp',
-        age: 1999
-      }
-    })
-  } else {
-    res.status(400).json({
-      massage: 'Invalid email or password'
-    })
-  }
-}
-
-// registerController nhận vào thông tin đăng ký của người dùng
-// và vào db để tạo user mới lưu vào
+//route này nhận vào email và password để tạo tài khoản cho mình
 export const registerController = async (
-  req: Request<ParamsDictionary, any, RegisterReqBody>,
+  req: Request<ParamsDictionary, any, RegisterRequestBody>,
   res: Response,
   next: NextFunction
 ) => {
+  // lấy email và password từ req.body mà người dùng muốn đăng kí tài khoản
   const { email } = req.body
-  // Vào db và nhét vào collection users
+  //tạo user và lưu vào database
 
-  // Kiểm tra email đc gửi lên có tồn tại chưa
-  const isDup = await usersServices.checkEmailExist(email)
-  if (isDup) {
+  //kiểm tra email đc gửi lên có tồn tại chưa
+  const isDub = await usersServices.checkEmailExist(email)
+  if (isDub) {
     throw new ErrorWithStatus({
-      status: HTTP_STATUS.UNPROCESSABLE_ENTITY, // 422
-      message: 'Email has been used'
+      status: HTTP_STATUS.UNAUTHORIZED, //401
+      message: USERS_MESSAGES.EMAIL_ALREADY_EXISTS
     })
   }
 
   const result = await usersServices.register(req.body)
-  res.status(201).json({
-    massage: 'Register success',
+  //nếu thành công
+  res.status(HTTP_STATUS.OK).json({
+    msg: USERS_MESSAGES.REGISTER_SUCCESS,
     data: result
+  })
+}
+
+export const loginController = async (
+  req: Request<ParamsDictionary, any, LoginReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  //cần lấy email và password để tìm xem user nào đg sở hữu
+  //nếu ko có user nào thì ngừng cuộc chơi
+  //nếu có thì tạo access và refresh token
+  const { email, password } = req.body
+  const result = await usersServices.login({ email, password })
+  res.status(HTTP_STATUS.OK).json({
+    message: USERS_MESSAGES.LOGIN_SUCCESS,
+    result
   })
 }

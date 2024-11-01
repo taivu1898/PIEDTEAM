@@ -1,35 +1,33 @@
 import express from 'express'
 import { loginController, registerController } from '~/controllers/users.controllers'
 import { loginValidator, registerValidator } from '~/middlewares/users.middlewares'
-import { wrapAsync } from '~/utils/handler'
+import { wrapAsync } from '~/utils/handlers'
 
-// Làm route
+//tạo userRoute
 const userRouter = express.Router()
 
-// users/login
-userRouter.post('/login', loginValidator, loginController)
-
-// desc: Register a new user
-// path: /register
-// method: post
-// body: {
-//   name: string,
-//   email: string,
-//   password: string,
-//   confirm_password: string,
-//   data_of_birth: string nhưng có dạng ISO8601
-// }
-
-userRouter.post('/register', registerValidator, loginController)
-
-// desc: login
-// path: users / login
-// method: post
-// body: {
-//   email: string
-//   password: string
-// }
-
+/*
+    description: Register a new user
+    path: /register
+    method: POST
+    body: {
+        name: string,
+        email: string,
+        password: string,
+        confirm_password: string,
+        date_of_birth: string nhưng có dạng ISO8601
+    }
+ */
 userRouter.post('/register', registerValidator, wrapAsync(registerController))
 
+/*
+    description: Login
+    path: /login
+    method: POST
+    body: {
+        email: string,
+        password: string
+    }
+*/
+userRouter.post('/login', loginValidator, wrapAsync(loginController))
 export default userRouter

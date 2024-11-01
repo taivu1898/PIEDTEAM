@@ -7,6 +7,6 @@ const HTTP_STATUS = {
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500
-} as const // nếu không có `as const` thì thuộc tính có thể bị thay đổi
+} as const
 
 export default HTTP_STATUS
