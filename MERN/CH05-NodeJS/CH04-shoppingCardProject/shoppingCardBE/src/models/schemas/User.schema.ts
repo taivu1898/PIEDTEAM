@@ -1,9 +1,9 @@
 import { ObjectId } from 'mongodb'
-import { USER_ROLE, UserVerifyStatus } from '~/constants/enums'
+import { UserVerifyStatus, USER_ROLE } from '~/constants/enums'
 
-//UserType sẽ mô tả rằng muốn tạo 1 user thì cần gì
+// UserType sẽ mô tả rằng muốn tạo một user thì cần gi
 interface UserType {
-  _id?: ObjectId // ? : optional
+  _id?: ObjectId // optional
   name: string
   email: string
   date_of_birth: Date
@@ -23,11 +23,11 @@ interface UserType {
   role?: USER_ROLE //đây là dạng Enum
 }
 
-//tạo ra class User để mô tả 1 user sẽ có các thuộc tính gì
-//class User sẽ dùng interface UserType để mô tả và tạo user
+// tạo ra class User dùng để mô tả 1 user sẽ có những thuộc tính gì
+// class User và sẽ dùng interface UserType để mô tả và tạo User
 export default class User {
   _id?: ObjectId
-  name: string
+  name?: string
   email: string
   date_of_birth: Date
   password: string

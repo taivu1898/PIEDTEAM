@@ -1,33 +1,41 @@
-import express from 'express'
-import { loginController, registerController } from '~/controllers/users.controllers'
-import { loginValidator, registerValidator } from '~/middlewares/users.middlewares'
+import express, { Request, Response } from 'express'
+import { loginController, logoutController, registerController } from '~/controllers/users.controller'
+import {
+  accTokenValidator,
+  loginValidator,
+  refreshTokenValidator,
+  registerValidator
+} from '~/middlewares/users.middlewares'
 import { wrapAsync } from '~/utils/handlers'
-
-//tạo userRoute
+// tạo user route
 const userRouter = express.Router()
 
-/*
-    description: Register a new user
-    path: /register
-    method: POST
-    body: {
-        name: string,
-        email: string,
-        password: string,
-        confirm_password: string,
-        date_of_birth: string nhưng có dạng ISO8601
-    }
- */
 userRouter.post('/register', registerValidator, wrapAsync(registerController))
 
 /*
-    description: Login
-    path: /login
-    method: POST
-    body: {
-        email: string,
+    desc: login
+    path: users/login
+    method: post
+    body:{
+        mail: string,
         password: string
     }
 */
+
+// localhost:3000/users/login
 userRouter.post('/login', loginValidator, wrapAsync(loginController))
+
+/*
+    desc: logout
+    path: users/logout
+    method: post
+    headers: {
+        Authoriation: 'Bearer <access_token>'
+    }
+    body: {
+        refresh_token
+    }
+*/
+
+userRouter.post('/logout', accTokenValidator, refreshTokenValidator, wrapAsync(logoutController))
 export default userRouter

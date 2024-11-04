@@ -1,5 +1,5 @@
-// dựa trên dạng lỗi bth {stack, message}
-// ta sẽ tạo ra 1 loại lỗi mới {status, message}
+// dựa trên dạng lỗi bình thường (stack, message)
+// ta sẽ tạo ra một loại lỗi mới {status, message}
 
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
@@ -13,7 +13,7 @@ export class ErrorWithStatus {
   }
 }
 
-//tạo kiểu lỗi
+// tạo kiểu lỗi giống thiết kế
 type ErrorType = Record<
   string,
   {
@@ -21,21 +21,12 @@ type ErrorType = Record<
     [key: string]: any
   }
 >
-/*
-{
-  key:string: {
-    msg: string
-    msg1: string
-    msg2: string
-  }
-}
-*/
 
 export class EntityError extends ErrorWithStatus {
-  //từ có status và message
+  // sẽ tự có status và msg
   errors: ErrorType
   constructor({ message = USERS_MESSAGES.VALIDATION_ERROR, errors }: { message?: string; errors: ErrorType }) {
-    super({ message, status: HTTP_STATUS.UNPROCESSABLE_ENTITY })
+    super({ message, status: HTTP_STATUS.UNPROCESSABLE_ENTITY }) // 422
     this.errors = errors
   }
 }
