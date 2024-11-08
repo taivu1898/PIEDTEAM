@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from 'express'
 import { body, check, checkSchema } from 'express-validator'
 import { JsonWebTokenError, VerifyErrors } from 'jsonwebtoken'
 import { capitalize, values } from 'lodash'
-import { register } from 'module'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { verifyToken } from '~/jwt'
@@ -226,6 +225,51 @@ export const refreshTokenValidator = validate(
             return true
           }
         }
+      }
+    },
+    ['body']
+  )
+)
+
+export const verifyEmailTokenValidator = validate(
+  checkSchema(
+    {
+      email_verify_token: {
+        trim: true,
+        notEmpty: { errorMessage: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED },
+        custom: {
+          options: async (value: string, { req }) => {
+            // value chính là email_verify_token, mình cần verify nó là xogn
+            try {
+              const decode_email_verify_token = await verifyToken({
+                token: value,
+                privateKey: process.env.JWT_SECRET_EMAIL_TOKEN as string
+              })
+              ;(req as Request).decode_email_verify_token = decode_email_verify_token
+            } catch (err) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED, // 401
+                message: (err as JsonWebTokenError).message
+              })
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['query']
+  )
+)
+
+export const forgotPasswordValidator = validate(
+  checkSchema(
+    {
+      email: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+        },
+        isEmail: true,
+        trim: true
       }
     },
     ['body']
