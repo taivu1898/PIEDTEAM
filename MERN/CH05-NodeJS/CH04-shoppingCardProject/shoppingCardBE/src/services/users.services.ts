@@ -2,7 +2,7 @@
 
 import User from '~/models/schemas/User.schema'
 import databaseService from './database.services'
-import { loginRegbody, RegisterReqBody } from '~/models/requests/users.request'
+import { loginRegbody, RegisterReqBody, UpdateMeReqBody } from '~/models/requests/users.request'
 import { hashPassword } from '~/utils/crypto'
 import { signToken } from '~/jwt'
 import { TokenType, UserVerifyStatus } from '~/constants/enums'
@@ -89,6 +89,11 @@ class UserService {
     return Boolean(user)
   }
 
+  async checkEmailVerifid(user_id: string): Promise<boolean> {
+    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    return user?.verify == UserVerifyStatus.Verified
+  }
+
   async checkRefreshToken({ user_id, refresh_token }: { user_id: string; refresh_token: string }) {
     const refreshToken = await databaseService.refresh_tokens.findOne({
       user_id: new ObjectId(user_id),
@@ -121,6 +126,30 @@ class UserService {
         message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_INVALID
       })
     }
+    return user
+  }
+
+  async checkForgotPasswordToken({
+    user_id, //
+    forgot_password_token
+  }: {
+    user_id: string
+    forgot_password_token: string
+  }) {
+    // dùng 2 thông tin trên để tìm user
+    // tìm được thì token ok
+    // khoong được thì throw với thông báo
+    const user = await databaseService.users.findOne({
+      _id: new ObjectId(user_id),
+      forgot_password_token
+    })
+    if (!user) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.UNAUTHORIZED,
+        message: USERS_MESSAGES.FORGOT_PASSWORD_TOKEN_IS_INVALID
+      })
+    }
+    // Nếu mà có user thì
     return user
   }
 
@@ -247,7 +276,87 @@ class UserService {
       http://localhost:8000/reset-password/?forgot_password_token=${forgot_password_token}
     `)
   }
+
+  async resetPassword({ user_id, password }: { user_id: string; password: string }) {
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [
+        {
+          $set: {
+            password: hashPassword(password),
+            forgot_password_token: ' ',
+            update_at: '$$NOW'
+          }
+        }
+      ]
+    )
+  }
+
+  async getMe(user_id: string) {
+    const user = await databaseService.users.findOne(
+      { _id: new ObjectId(user_id) },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    if (!user) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.NOT_FOUND,
+        message: USERS_MESSAGES.USER_NOT_FOUND
+      })
+    }
+    return user
+  }
+
+  async updateMe({ user_id, payload }: { user_id: string; payload: UpdateMeReqBody }) {
+    // payload này có 2 khuyết điểm
+    // 1. Mình không biết người dùng truyền lên cái gì
+    // 2. Nếu có truyền lên date_of_birth thì nó là string => date
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birt: new Date(payload.date_of_birth) } : payload
+    // 3. Nếu có truyền lên username thì mình phải cho username là unique
+    if (_payload.username) {
+      const user = await databaseService.users.findOne({
+        username: _payload.username
+      })
+      if (user) {
+        throw new ErrorWithStatus({
+          status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+          message: USERS_MESSAGES.USERNAME_ALREADY_EXISTS
+        })
+      }
+    }
+    // vượt qua thì update
+    const userInfor = await databaseService.users.findOneAndUpdate(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [
+        {
+          $set: {
+            ..._payload,
+            update_at: '$$NOW'
+          }
+        }
+      ],
+      {
+        returnDocument: 'after',
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return userInfor // Trả ra cho controller dùng
+  }
 }
+
 // tạo instance
 let userService = new UserService()
 export default userService
