@@ -1,3 +1,4 @@
+//
 // chuẩn bị hàm mã hóa một nội dung nào đó theo mã sha256
 
 import { createHash } from 'crypto'

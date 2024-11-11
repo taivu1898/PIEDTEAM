@@ -1,14 +1,15 @@
 import express, { Request, Response } from 'express'
+import { wrap } from 'module'
 import {
+  emailVerifyController,
   forgotPasswordController,
   getMeController,
   loginController,
   logoutController,
   registerController,
-  resendEmailVerifyController,
+  resendEmailVerifyToken,
   resetPasswordController,
   updateMeController,
-  verifyEmailController,
   verifyForgotPasswordTokenController
 } from '~/controllers/users.controller'
 import {
@@ -61,11 +62,11 @@ userRouter.post('/logout', accTokenValidator, refreshTokenValidator, wrapAsync(l
     để mình kiểm tra, vậy thì trong query sẽ có cái token đó
     mình sẽ verify và lưu payload vào decode_email_verify_token
     tạo ac và rf cho em đăng nhập  (options)
-
+    
     path: users/verify-email/?memail-verify_token = string
     method: get
 */
-userRouter.get('/verify-email', emailVerifyTokenValidator, wrapAsync(verifyEmailController))
+userRouter.get('/verify-email', emailVerifyTokenValidator, wrapAsync(emailVerifyController))
 
 /*
     desc: gửi lại link verify email khi người dùng nhấn gửi lại email
@@ -74,7 +75,7 @@ userRouter.get('/verify-email', emailVerifyTokenValidator, wrapAsync(verifyEmail
     headers: (Authorization: "bearer <access_token")
 */
 
-userRouter.post('/resend-verify-email', accTokenValidator, wrapAsync(resendEmailVerifyController))
+userRouter.post('/resend-verify-email', accTokenValidator, wrapAsync(resendEmailVerifyToken))
 
 /*
     desc: thông báo bị quên mật khẩu, yêu cầu lấy lại
@@ -107,7 +108,6 @@ userRouter.post(
     method: post
     body:{
         password: string,
-
         confirm_password: string,
         forgot_password_token: string
     }
@@ -121,10 +121,10 @@ userRouter.post(
 
 /*
     desc: get my profile
-    path: user/me
+    path: users/me
     method: post
-    headers:{
-    authorization: 'Bearer<access_token>'
+    headers: {
+    authorization: "Bearer <access_token>"
     }
 */
 
@@ -146,6 +146,10 @@ body: {
   cover_photo?: string // optional}
 */
 
-userRouter.patch('/me', accTokenValidator, updateMeValidator, wrapAsync(updateMeController))
-
+userRouter.patch(
+  '/me',
+  accTokenValidator, //
+  updateMeValidator,
+  wrapAsync(updateMeController)
+)
 export default userRouter

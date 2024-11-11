@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken'
+import { extend } from 'lodash'
 import { TokenType } from '~/constants/enums'
 import { ParsedQs } from 'qs'
-
 // file lưu các định nghĩa về request
 export interface RegisterReqBody {
   name: string
@@ -25,7 +25,7 @@ export interface LogoutReqBody {
   refresh_token: string
 }
 
-export interface VerifyEmailReqQuery extends ParsedQs {
+export interface emailVerifyReqQuery extends ParsedQs {
   email_verify_token: string
 }
 
@@ -42,7 +42,6 @@ export interface ResetPasswordReqBody {
   confirm_password: string
   forgot_password_token: string
 }
-
 export interface UpdateMeReqBody {
   name?: string
   date_of_birth?: Date

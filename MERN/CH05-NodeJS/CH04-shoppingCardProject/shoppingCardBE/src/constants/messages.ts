@@ -33,18 +33,17 @@ export const USERS_MESSAGES = {
   LOGOUT_SUCCESS: 'Logout successfully',
   EMAIL_VERIFY_TOKEN_IS_REQUIRED: 'Email verify token is required',
   EMAIL_VERIFY_TOKEN_IS_INVALID: 'Email verify token is invalid',
-  VERIFY_EMAIL_SUCCESS: 'Verify email is success',
+  EMAIl_VERIFY_SUCCESS: 'Email verify successfully',
+  USER_NOT_FOUND: 'User not found',
   EMAIL_HAS_BEEN_VERIFIED: 'Email has been verified',
-  EMAIL_HAS_BEEN_BANNED: 'Email has been banned',
+  ACCOUNT_HAS_BEEN_BANNED: 'Account has been banned',
+  RESEND_EMAIL_SUCCESS: 'Resend email success',
+  CHECK_EMAIL_TO_RESET_PASSWORD: 'Check email to reset password',
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Forgot password token is required',
   FORGOT_PASSWORD_TOKEN_IS_INVALID: 'Forgot password token is invalid',
-  RESEND_EMAIL_VERIFY_TOKEN_SUCCESS: 'Resend email verify token success',
-  USER_NOT_FOUND: 'User not found',
-  CHECK_EMAIL_TO_RESET_PASSWORD: 'Check email to reset password',
-  VERIFY_FORGOT_PASSWORD_TOKEN_SUCCESS: 'Verify forgot password token successfully',
-  RESET_PASSWORD_IS_SUCCESS: 'Reset password to success',
-  GET_PROFILE_SUCCESS: 'Get profile success',
-
+  VERIFY_FORGOT_PASSWORD_TOKEN_IS_SUCCESS: 'Forgot password token is successfully',
+  RESET_PASSWORD_IS_SUCCESS: 'Reset password is successfully',
+  GET_PROFILE_SUCCESS: 'Get profile successully',
   BIO_MUST_BE_A_STRING: 'Bio must be a string',
   BIO_LENGTH_MUST_BE_LESS_THAN_200: 'Bio length must be less than 200',
   LOCATION_MUST_BE_A_STRING: 'Location must be a string',
@@ -58,5 +57,6 @@ export const USERS_MESSAGES = {
   UPDATE_PROFILE_SUCCESS: 'Update profile success',
   USER_NOT_VERIFIED: 'User not verified',
   USERNAME_ALREADY_EXISTS: 'Username already exists',
-  USERNAME_IS_INVALID: 'Username is invalid'
+  USERNAME_IS_INVALID:
+    'Username must be a string and length must be 4 - 15, and contain only letters, numbers, and underscores, not only numbers'
 } as const

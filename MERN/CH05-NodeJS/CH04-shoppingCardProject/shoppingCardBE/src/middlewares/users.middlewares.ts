@@ -11,6 +11,7 @@ import { ErrorWithStatus } from '~/models/schemas/errors'
 import { validate } from '~/utils/validation'
 import dotenv from 'dotenv'
 import exp from 'constants'
+import { REGEX_USERNAME } from '~/constants/regex'
 dotenv.config()
 // middlewares giống như là 1 túi lọc, người dùng gửi req lên cho mình, mình sẽ
 // ép req phải đi qua các middlewares để kiểm tra, khi chạm vào next()
@@ -394,6 +395,15 @@ export const updateMeValidator = validate(
             max: 50
           },
           errorMessage: USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_LESS_THAN_50 //messages.ts thêm USERNAME_LENGTH_MUST_BE_LESS_THAN_50: 'Username length must be less than 50'
+        },
+        custom: {
+          options: (value: string, { req }) => {
+            // value chính là username
+            if (REGEX_USERNAME.test(value)) {
+              throw new Error(USERS_MESSAGES.USERNAME_IS_INVALID)
+            }
+            return true
+          }
         }
       },
       avatar: imageSchema,

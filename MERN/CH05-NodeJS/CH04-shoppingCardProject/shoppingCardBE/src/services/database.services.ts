@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 dotenv.config() // kích hoạt liên kết với env
-
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@shoppingcardprojectk19f.e10tw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=shoppingCardProjectK19F2Cluster`
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version

@@ -11,6 +11,8 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
+import { error } from 'console'
+import { update } from 'lodash'
 
 class UserService {
   // viết hàm dùng đúng jwt để đăng ký access_token
@@ -31,10 +33,11 @@ class UserService {
     })
   }
 
+  // viết hàm dùng đúng jwt để đăng ký email_verify_token
   private signEmailVerifyToken(user_id: string) {
     return signToken({
       payLoad: { user_id, tokenType: TokenType.EmailVerificationToken },
-      privateKey: process.env.JWT_SECRET_EMAIL_TOKEN as string,
+      privateKey: process.env.JWT_SECRET_EMAIL_VERIFY_TOKEN as string,
       options: { expiresIn: process.env.EMAIL_VERIFY_TOKEN_EXPIRE_IN }
     })
   }
@@ -48,11 +51,12 @@ class UserService {
   }
 
   async register(payload: RegisterReqBody) {
-    const user_id = new ObjectId()
+    let user_id = new ObjectId()
     const email_verify_token = await this.signEmailVerifyToken(user_id.toString())
     const result = await databaseService.users.insertOne(
       new User({
         _id: user_id,
+        username: `user${user_id.toString()}`,
         email_verify_token,
         ...payload,
         password: hashPassword(payload.password),
@@ -61,16 +65,16 @@ class UserService {
     )
     // sau khi tạo tài khoản và lưu trên database ta sẽ ký acc và rf để đưa
     // cho người dùng, nhưng mà muốn ký thì phải cần user_id của account đó
+
     // ký
     const [access_token, refresh_token] = await Promise.all([
       this.signAccessToken(user_id.toString()),
       this.signRefreshToken(user_id.toString())
     ])
+    // ký thêm email verify token gửi vào email của người đăng ký
+    console.log(`gửi mail link xác thực sau:
+      http://localhost:3000/users/verify-email/?email_verify_token=${email_verify_token}`)
 
-    console.log(`
-      Mô phỏng gửi link qua mail xác thực dăng kí:
-      http://localhost:3000/users/verify-email/?email_verify_token=${email_verify_token}
-    `)
     // lưu refresh token lại
     databaseService.refresh_tokens.insertOne(
       new RefreshToken({
@@ -81,89 +85,6 @@ class UserService {
     return {
       access_token,
       refresh_token
-    }
-  }
-  async checkEmailExist(email: string): Promise<Boolean> {
-    // tìm user nào đang xài email đó, ko có user thì nghĩa là email chưa ai xài
-    const user = await databaseService.users.findOne({ email })
-    return Boolean(user)
-  }
-
-  async checkEmailVerifid(user_id: string): Promise<boolean> {
-    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
-    return user?.verify == UserVerifyStatus.Verified
-  }
-
-  async checkRefreshToken({ user_id, refresh_token }: { user_id: string; refresh_token: string }) {
-    const refreshToken = await databaseService.refresh_tokens.findOne({
-      user_id: new ObjectId(user_id),
-      token: refresh_token
-    })
-    if (!refreshToken) {
-      throw new ErrorWithStatus({
-        status: HTTP_STATUS.UNAUTHORIZED, // 401
-        message: USERS_MESSAGES.REFRESH_TOKEN_IS_INVALID
-      })
-    }
-    return refresh_token
-  }
-
-  async checkEmailVerifyToken({
-    user_id,
-    email_verify_token
-  }: {
-    user_id: string
-    email_verify_token: string //
-  }) {
-    // tìm user bằng user_id và email_verify_token
-    const user = await databaseService.users.findOne({
-      _id: new ObjectId(user_id),
-      email_verify_token
-    })
-    if (!user) {
-      throw new ErrorWithStatus({
-        status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
-        message: USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_INVALID
-      })
-    }
-    return user
-  }
-
-  async checkForgotPasswordToken({
-    user_id, //
-    forgot_password_token
-  }: {
-    user_id: string
-    forgot_password_token: string
-  }) {
-    // dùng 2 thông tin trên để tìm user
-    // tìm được thì token ok
-    // khoong được thì throw với thông báo
-    const user = await databaseService.users.findOne({
-      _id: new ObjectId(user_id),
-      forgot_password_token
-    })
-    if (!user) {
-      throw new ErrorWithStatus({
-        status: HTTP_STATUS.UNAUTHORIZED,
-        message: USERS_MESSAGES.FORGOT_PASSWORD_TOKEN_IS_INVALID
-      })
-    }
-    // Nếu mà có user thì
-    return user
-  }
-
-  async findUserById(user_id: string) {
-    const user = await databaseService.users.findOne({
-      _id: new ObjectId(user_id)
-    })
-    if (!user) {
-      throw new ErrorWithStatus({
-        status: HTTP_STATUS.NOT_FOUND,
-        message: USERS_MESSAGES.USER_NOT_FOUND
-      })
-    } else {
-      return user
     }
   }
 
@@ -198,11 +119,115 @@ class UserService {
       refresh_token
     }
   }
+
   async logout(refresh_token: string) {
     await databaseService.refresh_tokens.deleteOne({ token: refresh_token })
   }
 
+  async findUserById(user_id: string) {
+    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    if (!user) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.NOT_FOUND, // 404
+        message: USERS_MESSAGES.USER_NOT_FOUND
+      })
+    }
+    return user
+  }
+
+  async checkEmailExist(email: string): Promise<Boolean> {
+    // tìm user nào đang xài email đó, ko có user thì nghĩa là email chưa ai xài
+    const user = await databaseService.users.findOne({ email })
+    return Boolean(user)
+  }
+
+  async checkRefreshToken({ user_id, refresh_token }: { user_id: string; refresh_token: string }) {
+    const refreshToken = await databaseService.refresh_tokens.findOne({
+      user_id: new ObjectId(user_id),
+      token: refresh_token
+    })
+    if (!refreshToken) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.UNAUTHORIZED, // 401
+        message: USERS_MESSAGES.REFRESH_TOKEN_IS_INVALID
+      })
+    }
+    return refresh_token
+  }
+
+  async checkEmailVerifyToken({ user_id, email_verify_token }: { user_id: string; email_verify_token: string }) {
+    // tìm xem user nào có sở hữu hai thông tin này cùng lúc
+    // nếu có thì nghĩa là token hợp lệ
+    // nếu ko có thì token này đã bị thay thế rồi
+    const user = await databaseService.users.findOne({
+      _id: new ObjectId(user_id), // người dùng đưa cho mình string nhưng mình cần objectId
+      email_verify_token
+    })
+    // nếu ko có thì token đã bị thay thế
+    if (!user) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.UNPROCESSABLE_ENTITY, //422
+        message: USERS_MESSAGES.EMAIL_IS_INVALID
+      })
+    }
+    // nếu có thì return
+    return user // thay thế cho chữ true
+  }
+
+  async checkForgotPasswordToken({
+    user_id,
+    forgot_password_token
+  }: {
+    user_id: string
+    forgot_password_token: string
+  }) {
+    // dùng 2 thông tni trên tìm user
+    //  tìm được thì token ok
+    // ko thì throw với thông báo "token invalid"
+    const user = await databaseService.users.findOne({
+      _id: new ObjectId(user_id),
+      forgot_password_token
+    })
+    if (!user) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.UNAUTHORIZED,
+        message: USERS_MESSAGES.FORGOT_PASSWORD_TOKEN_IS_INVALID
+      })
+    }
+    return user
+  }
+
+  async checkEmailVerified(user_id: string): Promise<boolean> {
+    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    return user?.verify == UserVerifyStatus.Verified
+  }
+
+  async resendEmailVerifyToken(user_id: string) {
+    const email_verify_token = await this.signEmailVerifyToken(user_id.toString())
+
+    console.log(`gửi mail link xác thực sau:
+      http://localhost:3000/users/verify-email/?email_verify_token=${email_verify_token}`)
+
+    // lưu vào database
+    databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [
+        {
+          $set: {
+            email_verify_token,
+            updated_at: `$$NOW`
+          }
+        }
+      ]
+    )
+  }
+
   async verifyEmail(user_id: string) {
+    // gọi hàm này khi đã kiểm tra email_verify_token
+    // đúng mã, đúng người dùng
+    // cập nhật trạng thái cho account
     await databaseService.users.updateOne(
       {
         _id: new ObjectId(user_id)
@@ -212,17 +237,17 @@ class UserService {
           $set: {
             verify: UserVerifyStatus.Verified,
             email_verify_token: '',
-            updated_at: '$$NOW'
+            updated_at: `$$NOW`
           }
         }
       ]
     )
-    // lưu rf token vào db
+    // ký lại ac và rf
     const [access_token, refresh_token] = await Promise.all([
-      this.signAccessToken(user_id),
-      this.signRefreshToken(user_id)
+      this.signAccessToken(user_id.toString()),
+      this.signRefreshToken(user_id.toString())
     ])
-    await databaseService.refresh_tokens.insertOne(
+    databaseService.refresh_tokens.insertOne(
       new RefreshToken({
         token: refresh_token,
         user_id: new ObjectId(user_id)
@@ -234,71 +259,52 @@ class UserService {
     }
   }
 
-  async resendEmailVerify(user_id: string) {
-    const email_verify_token = await this.signEmailVerifyToken(user_id)
-    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
-      {
-        $set: {
-          email_verify_token,
-          update_at: `$$NOW`
-        }
-      }
-    ])
-    console.log(`
-      Mô phỏng gửi link qua mail xác thực dăng kí:
-      http://localhost:3000/users/verify-email/?email_verify_token=${email_verify_token}
-    `)
-  }
-
   async forgotPassword(email: string) {
-    const user = (await databaseService.users.findOne({
-      email
-    })) as User
-    // lấy user id tạo mã forgot password token
-    const user_id = user._id as ObjectId
-    const forgot_password_token = await this.signForgotPasswordToken(user_id.toString())
-    // Lưu vào dbDb
-    await databaseService.users.updateOne(
-      {
-        _id: user_id
-      },
-      [
+    // dùng email tìm user lấy _id tạo forgot_password_token
+    const user = await databaseService.users.findOne({ email })
+    if (user) {
+      // đã xét điều kiện trước khi vô hàm
+      const user_id = user._id.toString()
+      // ký forgot_password_token
+      const forgot_password_token = await this.signForgotPasswordToken(user_id)
+      // lưu vào database
+      await databaseService.users.updateOne(
         {
-          $set: {
-            forgot_password_token,
-            update_at: `$$NOW`
+          _id: new ObjectId(user_id)
+        },
+        [
+          {
+            $set: {
+              forgot_password_token,
+              updated_at: `$$NOW`
+            }
           }
-        }
-      ]
-    )
-    console.log(`
-      Mô phỏng gửi link qua mail để đổi mk:
-      http://localhost:8000/reset-password/?forgot_password_token=${forgot_password_token}
-    `)
+        ]
+      )
+      // gửi email cái link cho người dùng aws | log
+      console.log(`gửi mail link xác thực sau:
+        http://localhost:8000/reset-password/?forgot_password_token=${forgot_password_token}`)
+    }
   }
 
   async resetPassword({ user_id, password }: { user_id: string; password: string }) {
-    await databaseService.users.updateOne(
+    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
       {
-        _id: new ObjectId(user_id)
-      },
-      [
-        {
-          $set: {
-            password: hashPassword(password),
-            forgot_password_token: ' ',
-            update_at: '$$NOW'
-          }
+        $set: {
+          password: hashPassword(password),
+          forgot_password_token: '',
+          updated_at: `$$NOW`
         }
-      ]
-    )
+      }
+    ])
   }
 
-  async getMe(user_id: string) {
+  async getme(user_id: string) {
     const user = await databaseService.users.findOne(
       { _id: new ObjectId(user_id) },
       {
         projection: {
+          // 0: ko lay, 1: lay
           password: 0,
           email_verify_token: 0,
           forgot_password_token: 0
@@ -316,22 +322,21 @@ class UserService {
 
   async updateMe({ user_id, payload }: { user_id: string; payload: UpdateMeReqBody }) {
     // payload này có 2 khuyết điểm
-    // 1. Mình không biết người dùng truyền lên cái gì
-    // 2. Nếu có truyền lên date_of_birth thì nó là string => date
-    const _payload = payload.date_of_birth ? { ...payload, date_of_birt: new Date(payload.date_of_birth) } : payload
-    // 3. Nếu có truyền lên username thì mình phải cho username là unique
+    // 1. mình ko biết người dùng truyền lên cái gì
+    // 2. nếu có truyền lên dateOfBirth thì nó sẽ là string => date
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+    // 3. nếu có truyền lên username thì mình phải cho username là unique
     if (_payload.username) {
-      const user = await databaseService.users.findOne({
-        username: _payload.username
-      })
+      // tìm xem có ai bị trùng ko
+      const user = await databaseService.users.findOne({ username: _payload.username })
       if (user) {
         throw new ErrorWithStatus({
-          status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+          status: HTTP_STATUS.FORBIDDEN,
           message: USERS_MESSAGES.USERNAME_ALREADY_EXISTS
         })
       }
     }
-    // vượt qua thì update
+    // vượt qua 2 cái chướng ngại vật đó thì update thôi
     const userInfor = await databaseService.users.findOneAndUpdate(
       {
         _id: new ObjectId(user_id)
@@ -339,8 +344,8 @@ class UserService {
       [
         {
           $set: {
-            ..._payload,
-            update_at: '$$NOW'
+            ...payload,
+            updated_at: `$$NOW`
           }
         }
       ],
@@ -353,10 +358,9 @@ class UserService {
         }
       }
     )
-    return userInfor // Trả ra cho controller dùng
+    return userInfor
   }
 }
-
 // tạo instance
 let userService = new UserService()
 export default userService
