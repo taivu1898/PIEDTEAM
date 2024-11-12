@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import {
+  ChangePasswordReqBody,
   emailVerifyReqQuery,
   ForgotPasswordReqBody,
   loginRegbody,
   LogoutReqBody,
+  RefreshTokenReqBody,
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
@@ -245,5 +247,45 @@ export const updateMeController = async (
   res.status(HTTP_STATUS.OK).json({
     message: USERS_MESSAGES.UPDATE_PROFILE_SUCCESS,
     userInfor
+  })
+}
+
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ChangePasswordReqBody>, //
+  res: Response,
+  next: NextFunction
+) => {
+  // Khi người dùng muốn đổi mật khẩu thì họ phải đăng nhập
+  // access_token => user_id
+  const { user_id } = req.decode_authorization as TokenPayload
+  // old_password để biết họ có sở hữu account không
+  const { old_password, password } = req.body
+  // Tiến hành cập nhật password
+  // Tìm và tiến hành cập nhật password
+  await userService.changePassword({
+    user_id,
+    old_password,
+    password
+  })
+  res.status(HTTP_STATUS.OK).json({
+    message: USERS_MESSAGES.CHANGE_PASSWORD_SUCCESS
+  })
+}
+
+export const refreshTokenController = async (
+  req: Request<ParamsDictionary, any, RefreshTokenReqBody>, //
+  res: Response,
+  next: NextFunction
+) => {
+  // Kiểm tra refrest_token còn hiệu lực trong db
+  const { user_id } = req.decode_refresh_token as TokenPayload
+  const { refresh_token } = req.body
+  await userService.checkRefreshToken({ user_id, refresh_token })
+  await userService.refreshToken({ user_id, refresh_token })
+  const result = await userService.refreshToken({ user_id, refresh_token })
+
+  res.status(HTTP_STATUS.OK).json({
+    message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS,
+    result
   })
 }

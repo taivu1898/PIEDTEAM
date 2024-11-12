@@ -11,8 +11,6 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
-import { error } from 'console'
-import { update } from 'lodash'
 
 class UserService {
   // viết hàm dùng đúng jwt để đăng ký access_token
@@ -360,7 +358,66 @@ class UserService {
     )
     return userInfor
   }
+
+  async changePassword({
+    user_id,
+    password,
+    old_password
+  }: {
+    user_id: string
+    password: string
+    old_password: string
+  }) {
+    const user = await databaseService.users.findOne({
+      _id: new ObjectId(user_id),
+      password: hashPassword(old_password)
+    })
+    // Nếu không có user thì nghĩa là client không phải chủ acc
+    if (!user) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.UNAUTHORIZED,
+        message: USERS_MESSAGES.USER_NOT_FOUND
+      })
+    }
+    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          password: hashPassword(password),
+          updated_at: '$$NOW'
+        }
+      }
+    ])
+  }
+  async refreshToken({
+    user_id,
+    refresh_token //
+  }: {
+    user_id: string
+    refresh_token: string //
+  }) {
+    // tạo ac và rf mới
+    const [access_token, new_refresh_token] = await Promise.all([
+      this.signAccessToken(user_id),
+      this.signRefreshToken(user_id)
+    ])
+    // Lưu rf mới
+    await databaseService.refresh_tokens.insertOne(
+      new RefreshToken({
+        token: new_refresh_token,
+        user_id: new ObjectId(user_id)
+      })
+    )
+    // Xóa rf cũ
+
+    await databaseService.refresh_tokens.deleteOne({ token: refresh_token })
+
+    return {
+      access_token,
+      refresh_token
+    }
+  }
 }
+
 // tạo instance
 let userService = new UserService()
 export default userService

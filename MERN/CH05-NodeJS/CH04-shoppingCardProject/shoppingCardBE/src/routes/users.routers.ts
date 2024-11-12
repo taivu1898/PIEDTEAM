@@ -1,19 +1,22 @@
-import express, { Request, Response } from 'express'
-import { wrap } from 'module'
+import express from 'express'
 import {
+  changePasswordController,
   emailVerifyController,
   forgotPasswordController,
   getMeController,
   loginController,
   logoutController,
+  refreshTokenController,
   registerController,
   resendEmailVerifyToken,
   resetPasswordController,
   updateMeController,
   verifyForgotPasswordTokenController
 } from '~/controllers/users.controller'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
   accTokenValidator,
+  changePasswordValidator,
   emailVerifyTokenValidator,
   forgotPasswordTokenValidator,
   forgotPasswordValidator,
@@ -23,6 +26,7 @@ import {
   resetPasswordValidator,
   updateMeValidator
 } from '~/middlewares/users.middlewares'
+import { UpdateMeReqBody } from '~/models/requests/users.request'
 import { wrapAsync } from '~/utils/handlers'
 // tạo user route
 const userRouter = express.Router()
@@ -62,7 +66,7 @@ userRouter.post('/logout', accTokenValidator, refreshTokenValidator, wrapAsync(l
     để mình kiểm tra, vậy thì trong query sẽ có cái token đó
     mình sẽ verify và lưu payload vào decode_email_verify_token
     tạo ac và rf cho em đăng nhập  (options)
-    
+
     path: users/verify-email/?memail-verify_token = string
     method: get
 */
@@ -148,8 +152,53 @@ body: {
 
 userRouter.patch(
   '/me',
+  filterMiddleware<UpdateMeReqBody>([
+    'name',
+    'date_of_birth',
+    'bio',
+    'location',
+    'website',
+    'avatar',
+    'username',
+    'cover_photo'
+  ]),
   accTokenValidator, //
   updateMeValidator,
   wrapAsync(updateMeController)
+)
+
+/*
+  desc: change-password
+  chức năng đổi mật khẩu
+  path: users/change-password
+  method: put
+  headers: {
+    Authorization: 'Bearer <access_token>'
+  }
+  body: {
+    old_password: string
+    password: string
+    confirm_password: string
+  }
+*/
+userRouter.put(
+  '/change-password',
+  accTokenValidator, //
+  changePasswordValidator,
+  wrapAsync(changePasswordController)
+)
+
+/*
+desc: refresh_token
+path: users/refresh-token
+method: post
+body: {
+refresh_token: string
+}
+*/
+userRouter.post(
+  '/refresh-token',
+  refreshTokenValidator, //
+  wrapAsync(refreshTokenController)
 )
 export default userRouter

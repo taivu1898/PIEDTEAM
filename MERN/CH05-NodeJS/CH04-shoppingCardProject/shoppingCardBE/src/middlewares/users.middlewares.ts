@@ -1,16 +1,14 @@
 // môt 3 interface giúp mô tả, req res do express cung cấp
-import { Request, Response, NextFunction } from 'express'
-import { body, check, checkSchema, ParamSchema } from 'express-validator'
-import { JsonWebTokenError, VerifyErrors } from 'jsonwebtoken'
-import { capitalize, values } from 'lodash'
-import { register } from 'module'
+import { Request } from 'express'
+import { checkSchema, ParamSchema } from 'express-validator'
+import { JsonWebTokenError } from 'jsonwebtoken'
+import { capitalize } from 'lodash'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { verifyToken } from '~/jwt'
 import { ErrorWithStatus } from '~/models/schemas/errors'
 import { validate } from '~/utils/validation'
 import dotenv from 'dotenv'
-import exp from 'constants'
 import { REGEX_USERNAME } from '~/constants/regex'
 dotenv.config()
 // middlewares giống như là 1 túi lọc, người dùng gửi req lên cho mình, mình sẽ
@@ -399,7 +397,7 @@ export const updateMeValidator = validate(
         custom: {
           options: (value: string, { req }) => {
             // value chính là username
-            if (REGEX_USERNAME.test(value)) {
+            if (!REGEX_USERNAME.test(value)) {
               throw new Error(USERS_MESSAGES.USERNAME_IS_INVALID)
             }
             return true
@@ -408,6 +406,17 @@ export const updateMeValidator = validate(
       },
       avatar: imageSchema,
       cover_photo: imageSchema
+    },
+    ['body']
+  )
+)
+
+export const changePasswordValidator = validate(
+  checkSchema(
+    {
+      old_password: passwordSchema,
+      password: passwordSchema,
+      confirm_password: confirmPasswordSchema
     },
     ['body']
   )

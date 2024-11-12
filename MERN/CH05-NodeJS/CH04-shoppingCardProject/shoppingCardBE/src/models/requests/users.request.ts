@@ -1,5 +1,4 @@
 import { JwtPayload } from 'jsonwebtoken'
-import { extend } from 'lodash'
 import { TokenType } from '~/constants/enums'
 import { ParsedQs } from 'qs'
 // file lưu các định nghĩa về request
@@ -51,4 +50,14 @@ export interface UpdateMeReqBody {
   username?: string // optional
   avatar?: string // optional
   cover_photo?: string // optional}
+}
+
+export interface ChangePasswordReqBody {
+  old_password: string
+  password: string
+  confirm_password: string
+}
+
+export interface RefreshTokenReqBody {
+  refresh_token: string
 }
