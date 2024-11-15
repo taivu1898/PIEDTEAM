@@ -9,6 +9,6 @@ function sha256(content: string) {
 }
 
 // viết hàm hashPassword
-export function hashPassword(passwoed: string) {
-  return sha256(passwoed + process.env.PASSWORD_SECRET)
+export function hashPassword(password: string) {
+  return sha256(password + process.env.PASSWORD_SECRET)
 }
